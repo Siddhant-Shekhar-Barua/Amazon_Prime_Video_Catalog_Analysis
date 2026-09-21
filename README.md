@@ -31,6 +31,7 @@ Before deploying visualizations, a strict data cleansing and architectural layou
 2. **Metadata Standardization:** Cleaned the `age_certification` column (65% missingness) by standardizing and mapping all empty strings into a distinct, queryable `'Not Rated'` category to protect parental lock UX variables.
 3. **Statistical Imputation:** Replaced missing numerical scores in `imdb_score` and `tmdb_score` using column **Medians** instead of means, preventing outlier skewing and preserving the natural Gaussian shape of the ratings distribution.
 4. **Relational Decoupling (De-nesting):** Stringified arrays in `genres` and `production_countries` were parsed into actual Python lists using `ast.literal_eval`. To completely avoid row duplication and the subsequent artificial inflation of statistical averages (the One-to-Many explosion trap), independent lookup **Dimension Tables** (`Country_table` and `Genre_table`) were engineered, mapping back to the primary titles master sheet via unique IDs.
+5. **
 
 ---
 
@@ -40,6 +41,18 @@ Before deploying visualizations, a strict data cleansing and architectural layou
 * **Stable Quality Baseline:** Overlaying a Kernel Density Estimate (KDE) line over rating distributions exposed a clean Gaussian curve centered around a **6.1 median IMDb score**, showing a highly uniform mid-tier repository but a clear scarcity of premium masterpieces.
 * **The Regional Powerhouse:** Interactive spatial tracking isolated **India (IN)** as the fastest-growing and highest-performing production footprint outside the United States, representing a prime international expansion hub.
 * **The Myth of 'Genre Packing':** An annotated Pearson correlation matrix mathematically proved that an asset's total `genre_count` has a near-zero relationship (**$r \approx 0.02$**) with final user scores, proving that stuffing content with excessive tags does not improve user satisfaction.
+
+# ML insights #
+* **Model optimization required:** the model performms very poorly , the probable reasons could be lack of proper features
+ ## Random Forest ##
+ the RMSE: 1.055829410534482
+ r2: 0.2938027801751518
+ MSE: 1.114775744149592  
+
+ ## XGboost ##
+
+ XGBoost RMSE: 1.0455824901720054
+ XGBoost R²: 0.3074436806822295
 
 ---
 
@@ -53,5 +66,5 @@ Before deploying visualizations, a strict data cleansing and architectural layou
 
 ## 🔮 Future Scope & Engineering Roadmap
 * **Executive Dashboarding:** Migrate the engineered relational data structures into an interactive Tableau/Power BI dashboard for real-time stakeholder reporting.
-* **Predictive Modeling:** Construct a Machine Learning pipeline (Random Forest / XGBoost) to predict a title's potential audience rating *prior* to platform acquisition based on historical cast, crew, and genre combinations.
+* **Predictive Modeling:** Construct a  optimized Machine Learning pipeline (Random Forest / XGBoost) to predict a title's potential audience rating *prior* to platform acquisition based on historical cast, crew, and genre combinations.This will include new features as our predictive variables.If metrics still doesnt get better , we shall use optuna (bayesian optimization) as last resort 
 * **Natural Language Processing (NLP):** Apply sentiment analysis and text-mining models on the textual `description` attributes to automate semantic content categorization.
